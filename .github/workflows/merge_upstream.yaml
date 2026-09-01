@@ -1,0 +1,149 @@
+name: Merge Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  merge-upstream:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      SYNC_BRANCH: ${{ github.ref_name }}
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream
+        run: |
+          git remote add upstream https://github.com/Aethersailor/Custom_OpenClash_Rules.git
+          git fetch upstream main
+
+      - name: Try Merge
+        id: merge
+        run: |
+          # Ensure we are at the latest commit from origin
+          git fetch origin "$SYNC_BRANCH"
+          git reset --hard "origin/$SYNC_BRANCH"
+
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "result=no-changes" >> "$GITHUB_OUTPUT"
+            echo "Already up to date with upstream."
+            exit 0
+          fi
+
+          # Keep the merge open so repository-specific paths can be restored
+          # before the merge commit is created.
+          merge_status=0
+          git merge upstream/main --no-commit --no-ff || merge_status=$?
+
+          if [ "$merge_status" -ne 0 ]; then
+            conflicts="$(git diff --name-only --diff-filter=U)"
+            unexpected_conflicts="$(
+              printf '%s\n' "$conflicts" |
+                grep -Ev '^(\.github/|cfg/Custom_Clash\.ini$)' || true
+            )"
+
+            # Only the explicitly protected paths may be resolved automatically.
+            if [ -z "$conflicts" ] || [ -n "$unexpected_conflicts" ]; then
+              echo "Unexpected merge conflicts:"
+              printf '%s\n' "${unexpected_conflicts:-$conflicts}"
+              echo "result=conflict" >> "$GITHUB_OUTPUT"
+              git merge --abort
+              exit 0
+            fi
+
+            if printf '%s\n' "$conflicts" | grep -qx 'cfg/Custom_Clash.ini'; then
+              upstream_direct_line="$(
+                git show :3:cfg/Custom_Clash.ini |
+                  grep -m1 '^custom_proxy_group=🎯 全球直连`select`'
+              )"
+
+              if [ -z "$upstream_direct_line" ]; then
+                echo "Unable to find the upstream direct-group definition."
+                echo "result=conflict" >> "$GITHUB_OUTPUT"
+                git merge --abort
+                exit 0
+              fi
+
+              git checkout --ours -- cfg/Custom_Clash.ini
+              cfg_tmp="${RUNNER_TEMP}/Custom_Clash.ini"
+              if ! awk -v replacement="$upstream_direct_line" '
+                BEGIN { updated = 0 }
+                /^custom_proxy_group=🎯 全球直连`select`/ {
+                  print replacement
+                  updated++
+                  next
+                }
+                { print }
+                END { if (updated != 1) exit 1 }
+              ' cfg/Custom_Clash.ini > "$cfg_tmp"; then
+                echo "Unable to update exactly one local direct-group definition."
+                echo "result=conflict" >> "$GITHUB_OUTPUT"
+                git merge --abort
+                exit 0
+              fi
+              mv "$cfg_tmp" cfg/Custom_Clash.ini
+              git add cfg/Custom_Clash.ini
+            fi
+          fi
+
+          # Never import upstream GitHub metadata or Actions. Restoring the
+          # complete directory also removes files newly added by upstream.
+          git rm -r -f --ignore-unmatch -- .github
+          git checkout HEAD -- .github
+
+          remaining_conflicts="$(git diff --name-only --diff-filter=U)"
+          if [ -n "$remaining_conflicts" ]; then
+            echo "Unresolved merge conflicts:"
+            printf '%s\n' "$remaining_conflicts"
+            echo "result=conflict" >> $GITHUB_OUTPUT
+            git merge --abort
+            exit 0
+          fi
+
+          # Commit even when all upstream changes were in protected paths.
+          # This preserves upstream ancestry and prevents retrying the same
+          # protected changes on every scheduled run.
+          git commit --no-edit
+          git push origin "HEAD:$SYNC_BRANCH"
+          echo "result=success" >> "$GITHUB_OUTPUT"
+
+      - name: Report Conflict
+        if: steps.merge.outputs.result == 'conflict'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issueTitle = '🚨 Merge Update Conflict: Manual Review Required';
+            const issueBody = 'The automated merge with the upstream repository encountered conflicts.\nPlease resolve them manually to preserve repository integrity.\n\n**Upstream Repo:** https://github.com/Aethersailor/Custom_OpenClash_Rules';
+
+            // Check if there is already an open issue for this
+            const issues = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'open',
+              creator: 'github-actions[bot]'
+            });
+            const existingIssue = issues.data.find(i => i.title === issueTitle);
+
+            if (!existingIssue) {
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title: issueTitle,
+                body: issueBody
+              });
+            }
