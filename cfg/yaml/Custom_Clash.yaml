@@ -39,7 +39,6 @@ proxy-groups:
   - name: "🚀 手动选择"
     type: select
     proxies:
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
@@ -48,188 +47,55 @@ proxy-groups:
       - "🇰🇷 韩国节点"
     use:
       - provider1
-
-  - name: "♻️ 自动选择"
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    interval: 300
-    tolerance: 50
-    use:
-      - provider1
-
-  - name: "💬 即时通讯"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇸🇬 新加坡节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-      - "🎯 全球直连"
 
   - name: "🌐 社交媒体"
     type: select
     proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-      - "🎯 全球直连"
-    use:
-      - provider1
 
   - name: "🚀 GitHub"
     type: select
     proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-      - "🎯 全球直连"
 
   - name: "🤖 ChatGPT"
     type: select
     proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇸🇬 新加坡节点"
-      - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "🤖 AI服务"
     type: select
     proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇸🇬 新加坡节点"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎶 TikTok"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇸🇬 新加坡节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "📹 YouTube"
     type: select
     proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇸🇬 新加坡节点"
       - "🇭🇰 香港节点"
+      - "🇸🇬 新加坡节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎥 Netflix"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇸🇬 新加坡节点"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎥 DisneyPlus"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇸🇬 新加坡节点"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎥 HBO"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇸🇬 新加坡节点"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎥 PrimeVideo"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇸🇬 新加坡节点"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎥 AppleTV+"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇸🇬 新加坡节点"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-      - "🎯 全球直连"
-    use:
-      - provider1
 
   - name: "🎥 Emby"
     type: select
     proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🎯 全球直连"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
@@ -237,67 +103,23 @@ proxy-groups:
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎻 Spotify"
-    type: select
-    proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🎯 全球直连"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇸🇬 新加坡节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "📺 Bahamut"
-    type: select
-    proxies:
-      - "🇼🇸 台湾节点"
-      - "🚀 手动选择"
-      - "🎯 全球直连"
-    use:
-      - provider1
 
   - name: "🌎 国外媒体"
     type: select
     proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "🛒 国外电商"
     type: select
     proxies:
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🎯 全球直连"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇸🇬 新加坡节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "📢 谷歌FCM"
-    type: select
-    proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
@@ -309,96 +131,65 @@ proxy-groups:
     type: select
     proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "🍎 苹果服务"
     type: select
     proxies:
       - "🎯 全球直连"
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "Ⓜ️ 微软服务"
     type: select
     proxies:
       - "🎯 全球直连"
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "🎮 游戏平台"
     type: select
     proxies:
       - "🎯 全球直连"
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
-
-  - name: "🎮 Steam"
-    type: select
-    proxies:
-      - "🎯 全球直连"
-      - "🚀 手动选择"
-      - "♻️ 自动选择"
-      - "🇭🇰 香港节点"
-      - "🇺🇸 美国节点"
-      - "🇯🇵 日本节点"
-      - "🇸🇬 新加坡节点"
-      - "🇼🇸 台湾节点"
-      - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "🚀 测速工具"
     type: select
     proxies:
       - "🎯 全球直连"
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
       - "🇯🇵 日本节点"
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "🐟 漏网之鱼"
     type: select
     proxies:
       - "🚀 手动选择"
-      - "♻️ 自动选择"
       - "🎯 全球直连"
       - "🇭🇰 香港节点"
       - "🇺🇸 美国节点"
@@ -406,8 +197,6 @@ proxy-groups:
       - "🇸🇬 新加坡节点"
       - "🇼🇸 台湾节点"
       - "🇰🇷 韩国节点"
-    use:
-      - provider1
 
   - name: "🔀 非标端口"
     type: select
@@ -493,36 +282,29 @@ rules:
   - "RULE-SET,Steam_CDN_IP,🎯 全球直连,no-resolve"
   - "GEOSITE,category-game-platforms-download,🎯 全球直连"
   - "GEOSITE,category-public-tracker,🎯 全球直连"
-  - "GEOSITE,category-communication,💬 即时通讯"
+  - "GEOSITE,category-communication,🌐 社交媒体"
   - "GEOSITE,category-social-media-!cn,🌐 社交媒体"
   - "GEOSITE,openai,🤖 ChatGPT"
   - "GEOSITE,category-ai-!cn,🤖 AI服务"
   - "GEOSITE,github,🚀 GitHub"
   - "GEOSITE,category-speedtest,🚀 测速工具"
-  - "GEOSITE,steam,🎮 Steam"
   - "GEOSITE,youtube,📹 YouTube"
-  - "GEOSITE,apple-tvplus,🎥 AppleTV+"
+  - "GEOSITE,apple-tvplus,🌎 国外媒体"
   - "GEOSITE,apple,🍎 苹果服务"
   - "GEOSITE,microsoft,Ⓜ️ 微软服务"
-  - "GEOSITE,googlefcm,📢 谷歌FCM"
+  - "GEOSITE,googlefcm, 🇭🇰 香港节点"
   - "GEOSITE,google,🇬 谷歌服务"
-  - "GEOSITE,tiktok,🎶 TikTok"
-  - "GEOSITE,netflix,🎥 Netflix"
-  - "GEOSITE,disney,🎥 DisneyPlus"
-  - "GEOSITE,hbo,🎥 HBO"
-  - "GEOSITE,primevideo,🎥 PrimeVideo"
   - "GEOSITE,category-emby,🎥 Emby"
-  - "GEOSITE,spotify,🎻 Spotify"
-  - "GEOSITE,bahamut,📺 Bahamut"
+  - "GEOSITE,spotify,🎯 全球直连"
   - "GEOSITE,category-games,🎮 游戏平台"
   - "GEOSITE,category-entertainment,🌎 国外媒体"
   - "GEOSITE,category-ecommerce,🛒 国外电商"
   - "GEOSITE,gfw,🚀 手动选择"
-  - "GEOIP,telegram,💬 即时通讯,no-resolve"
+  - "GEOIP,telegram,🌐 社交媒体,no-resolve"
   - "GEOIP,twitter,🌐 社交媒体,no-resolve"
   - "GEOIP,facebook,🌐 社交媒体,no-resolve"
   - "GEOIP,google,🇬 谷歌服务,no-resolve"
-  - "GEOIP,netflix,🎥 Netflix,no-resolve"
+  - "GEOIP,netflix,🌎 国外媒体,no-resolve"
   - "GEOSITE,cn,🎯 全球直连"
   - "GEOIP,cn,🎯 全球直连,no-resolve"
   - "RULE-SET,Nonstandard_Port_Direct,🔀 非标端口"
