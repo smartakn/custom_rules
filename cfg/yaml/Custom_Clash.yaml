@@ -294,6 +294,7 @@ rules:
   - "GEOSITE,microsoft,Ⓜ️ 微软服务"
   - "GEOSITE,googlefcm, 🇭🇰 香港节点"
   - "GEOSITE,google,🇬 谷歌服务"
+  - "GEOSITE,reddit,🇬 谷歌服务"
   - "GEOSITE,category-emby,🎥 Emby"
   - "GEOSITE,spotify,🎯 全球直连"
   - "GEOSITE,category-games,🎮 游戏平台"
