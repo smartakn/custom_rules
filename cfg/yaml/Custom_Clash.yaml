@@ -300,6 +300,7 @@ rules:
   - "GEOSITE,category-games,🎮 游戏平台"
   - "GEOSITE,category-entertainment,🌎 国外媒体"
   - "GEOSITE,category-ecommerce,🛒 国外电商"
+  - "GEOSITE,tiktok,🇸🇬 新加坡节点"
   - "GEOSITE,gfw,🚀 手动选择"
   - "GEOIP,telegram,🌐 社交媒体,no-resolve"
   - "GEOIP,twitter,🌐 社交媒体,no-resolve"
