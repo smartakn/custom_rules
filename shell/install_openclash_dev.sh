@@ -13,7 +13,6 @@ N=''
 OPENCLASH_REPO_URL="https://github.com/vernesong/OpenClash.git"
 PACKAGE_REF="refs/heads/package"
 GIT_REFS_URL="${OPENCLASH_REPO_URL}/info/refs?service=git-upload-pack"
-JSDELIVR_PACKAGE_PREFIX="https://testingcf.jsdelivr.net/gh/vernesong/OpenClash@"
 RAW_PACKAGE_PREFIX="https://raw.githubusercontent.com/vernesong/OpenClash"
 GH_PROXY_PREFIX="https://v6.gh-proxy.org/"
 PACKAGE_MAX_ROUNDS="${PACKAGE_MAX_ROUNDS:-2}"
@@ -42,7 +41,7 @@ FEED_BACKUP=""
 FEED_CHANGED=0
 PRESERVED_PACKAGE_PATH=""
 PACKAGE_EXPECTED_SIZE=""
-PACKAGE_EXPECTED_SHA256=""
+PACKAGE_EXPECTED_BLOB_SHA1=""
 INSTALLER_LOG="/tmp/openclash-installer.$$.log"
 CURRENT_STAGE="启动安装器"
 WARNING_COUNT=0
@@ -449,33 +448,37 @@ file_sha256() {
     printf '%s\n' "$digest"
 }
 
-base64_sha256_to_hex() {
-    command -v base64 >/dev/null 2>&1 || return 1
-    command -v od >/dev/null 2>&1 || return 1
-    digest=$(printf '%s' "$1" | base64 -d 2>/dev/null |
-        od -An -tx1 2>/dev/null | tr -d ' \n')
+file_git_blob_sha1() {
+    file=$1
+    size=$(file_size_bytes "$file")
+    [ -n "$size" ] || return 1
+    if command -v sha1sum >/dev/null 2>&1; then
+        digest=$({ printf 'blob %s\000' "$size"; cat "$file"; } |
+            sha1sum 2>/dev/null | awk '{print tolower($1)}')
+    elif command -v openssl >/dev/null 2>&1; then
+        digest=$({ printf 'blob %s\000' "$size"; cat "$file"; } |
+            openssl dgst -sha1 2>/dev/null | awk '{print tolower($NF)}')
+    else
+        return 1
+    fi
     case "$digest" in
         *[!0-9a-f]* | '') return 1 ;;
     esac
-    [ "${#digest}" -eq 64 ] || return 1
+    [ "${#digest}" -eq 40 ] || return 1
     printf '%s\n' "$digest"
 }
 
-parse_jsdelivr_package_metadata() {
+parse_github_package_metadata() {
     metadata_file=$1
     file_name=$2
     tr -d '\r\n\t ' <"$metadata_file" 2>/dev/null |
-        awk -v target="/dev/$file_name" '
+        awk -v target="dev/$file_name" '
             {
-                key="\"name\":\"" target "\""
-                start=index($0, key)
-                if (!start) exit
-                tail=substr($0, start)
-                remainder=substr(tail, length(key) + 1)
-                next_name=index(remainder, "\"name\":\"")
-                if (next_name) tail=substr(tail, 1, length(key) + next_name - 1)
+                if (!index($0, "\"path\":\"" target "\"") ||
+                    !index($0, "\"type\":\"file\"")) exit
+                tail=$0
 
-                hash_marker="\"hash\":\""
+                hash_marker="\"sha\":\""
                 hash_start=index(tail, hash_marker)
                 if (!hash_start) exit
                 hash_tail=substr(tail, hash_start + length(hash_marker))
@@ -488,7 +491,8 @@ parse_jsdelivr_package_metadata() {
                 if (!size_start) exit
                 size=substr(tail, size_start + length(size_marker))
                 sub(/[^0-9].*/, "", size)
-                if (size ~ /^[0-9]+$/ && size > 0) print hash, size
+                if (size ~ /^[0-9]+$/ && size > 0 &&
+                    hash ~ /^[0-9a-f]+$/ && length(hash) == 40) print hash, size
             }
         '
 }
@@ -497,22 +501,23 @@ fetch_package_integrity_metadata() {
     commit=$1
     file_name=$2
     PACKAGE_EXPECTED_SIZE=""
-    PACKAGE_EXPECTED_SHA256=""
+    PACKAGE_EXPECTED_BLOB_SHA1=""
     PACKAGE_INTEGRITY="文件大小和安装预检通过"
     metadata_file="$TMP_DIR/package-metadata.json"
-    metadata_url="https://data.jsdelivr.com/v1/package/gh/vernesong/OpenClash@${commit}/flat"
+    metadata_url="https://api.github.com/repos/vernesong/OpenClash/contents/dev/${file_name}?ref=${commit}"
 
     rm -f "$metadata_file"
     if ! curl -fsSL --connect-timeout "${INTEGRITY_CONNECT_TIMEOUT:-3}" \
         --max-time "${INTEGRITY_MAX_TIME:-8}" \
-        -H 'Accept: application/json' \
+        -H 'Accept: application/vnd.github.object+json' \
+        -H 'X-GitHub-Api-Version: 2022-11-28' \
         -o "$metadata_file" "$metadata_url" 2>/dev/null; then
         append_log "安装包官方元数据不可用，使用文件大小和安装预检。"
         return 0
     fi
 
-    metadata=$(parse_jsdelivr_package_metadata "$metadata_file" "$file_name")
-    encoded_hash=${metadata%% *}
+    metadata=$(parse_github_package_metadata "$metadata_file" "$file_name")
+    blob_sha1=${metadata%% *}
     expected_size=${metadata#* }
     if [ -z "$metadata" ] || [ "$expected_size" = "$metadata" ]; then
         append_log "安装包官方元数据不可解析，使用文件大小和安装预检。"
@@ -520,12 +525,8 @@ fetch_package_integrity_metadata() {
     fi
 
     PACKAGE_EXPECTED_SIZE=$expected_size
-    if PACKAGE_EXPECTED_SHA256=$(base64_sha256_to_hex "$encoded_hash"); then
-        PACKAGE_INTEGRITY="官方文件大小、SHA-256 和安装预检均通过"
-    else
-        PACKAGE_EXPECTED_SHA256=""
-        PACKAGE_INTEGRITY="官方文件大小和安装预检通过"
-    fi
+    PACKAGE_EXPECTED_BLOB_SHA1=$blob_sha1
+    PACKAGE_INTEGRITY="官方文件大小、Git blob SHA-1 和安装预检均通过"
     return 0
 }
 
@@ -597,12 +598,10 @@ download_commit_file() {
     path=$2
     output=$3
     raw_url="${RAW_PACKAGE_PREFIX}/${commit}/dev/${path}"
-    jsdelivr_url="${JSDELIVR_PACKAGE_PREFIX}${commit}/dev/${path}"
     proxy_url="${GH_PROXY_PREFIX}${raw_url}"
 
-    curl_download "$output" "$jsdelivr_url" ||
-        curl_download "$output" "$proxy_url" ||
-        curl_download "$output" "$raw_url"
+    curl_download "$output" "$raw_url" ||
+        curl_download "$output" "$proxy_url"
 }
 
 parse_package_version() {
@@ -637,15 +636,15 @@ verify_package_file() {
         return 1
     fi
 
-    if [ -n "${PACKAGE_EXPECTED_SHA256:-}" ]; then
-        if actual_sha256=$(file_sha256 "$file"); then
-            if [ "$actual_sha256" != "$PACKAGE_EXPECTED_SHA256" ]; then
-                log_warn "安装包 SHA-256 与固定提交元数据不一致。"
+    if [ -n "${PACKAGE_EXPECTED_BLOB_SHA1:-}" ]; then
+        if actual_blob_sha1=$(file_git_blob_sha1 "$file"); then
+            if [ "$actual_blob_sha1" != "$PACKAGE_EXPECTED_BLOB_SHA1" ]; then
+                log_warn "安装包 Git blob SHA-1 与固定提交元数据不一致。"
                 return 1
             fi
         else
-            log_info "设备缺少可用 SHA-256 工具，继续执行包管理器 dry-run 校验。"
-            PACKAGE_INTEGRITY="官方文件大小和安装预检通过；设备未提供 SHA-256 工具"
+            log_info "设备缺少可用 SHA-1 工具，继续执行包管理器 dry-run 校验。"
+            PACKAGE_INTEGRITY="官方文件大小和安装预检通过；设备未提供 SHA-1 工具"
         fi
     fi
 
@@ -665,24 +664,19 @@ download_openclash_package() {
     file_name=$2
     output=$3
     raw_url="${RAW_PACKAGE_PREFIX}/${commit}/dev/${file_name}"
-    jsdelivr_url="${JSDELIVR_PACKAGE_PREFIX}${commit}/dev/${file_name}"
     proxy_url="${GH_PROXY_PREFIX}${raw_url}"
 
     fetch_package_integrity_metadata "$commit" "$file_name"
     attempt=1
-    for source_name in jsdelivr proxy raw; do
+    for source_name in raw proxy; do
         case "$source_name" in
-            jsdelivr)
-                source=$jsdelivr_url
-                source_label="jsDelivr"
+            raw)
+                source=$raw_url
+                source_label="GitHub Raw"
                 ;;
             proxy)
                 source=$proxy_url
                 source_label="v6.gh-proxy"
-                ;;
-            raw)
-                source=$raw_url
-                source_label="GitHub Raw"
                 ;;
         esac
         log_info "正在通过 $source_label 获取安装包……"
@@ -692,7 +686,7 @@ download_openclash_package() {
             PACKAGE_SOURCE=$source_label
             return 0
         fi
-        if [ "$attempt" -lt 3 ]; then
+        if [ "$attempt" -lt 2 ]; then
             log_warn "$source_label 未获得有效安装包，正在自动尝试备用来源。"
         else
             log_warn "$source_label 未获得有效安装包。"
@@ -883,14 +877,14 @@ configure_base_uci() {
     detected_arch=$(detect_core_arch) || return 1
     uci -q batch <<EOF
 set openclash.config.release_branch='dev'
-set openclash.config.github_address_mod='https://testingcf.jsdelivr.net/'
+set openclash.config.github_address_mod='0'
 set openclash.config.core_version='$detected_arch'
 set openclash.config.enable='1'
 EOF
     uci commit openclash || return 1
     ui_field "CPU / 内核架构" "$detected_arch"
     ui_field "插件分支" "Dev"
-    ui_field "下载加速" "testingcf.jsdelivr.net"
+    ui_field "GitHub 下载" "官方原站"
     log_ok "内核架构、插件分支和启用状态已写入。"
 }
 

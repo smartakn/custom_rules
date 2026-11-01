@@ -9,8 +9,6 @@ export const MIRROR_CONFIG = Object.freeze({
     "https://github.com/Aethersailor/Custom_OpenClash_Rules/tree/main",
   githubRawUrl:
     "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Custom_Direct.list",
-  jsdelivrUrl:
-    "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct.list",
   redirectRuleRefs: Object.freeze(["cor_main_page", "cor_main_files"]),
   redirectPhase: "http_request_dynamic_redirect",
   debounceThreshold: 2,

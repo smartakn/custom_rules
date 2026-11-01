@@ -100,12 +100,6 @@ OpenClash `dev` 版通常可直接从内置列表选择全部 8 个模板。以�
 
 ### 标准版
 
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash.ini
-```
-
 GitHub Raw 地址：
 
 ```text
@@ -116,12 +110,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads
 
 ### 标准故障转移版
 
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash_Fallback.ini
-```
-
 GitHub Raw 地址：
 
 ```text
@@ -129,12 +117,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads
 ```
 
 ### 轻量版
-
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash_Lite.ini
-```
 
 GitHub Raw 地址：
 
@@ -146,12 +128,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads
 
 ### 轻量故障转移版
 
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash_Lite_Fallback.ini
-```
-
 GitHub Raw 地址：
 
 ```text
@@ -159,12 +135,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads
 ```
 
 ### 极简 GFW 版
-
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash_GFW.ini
-```
 
 GitHub Raw 地址：
 
@@ -176,12 +146,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads
 
 ### 极简 GFW 故障转移版
 
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash_GFW_Fallback.ini
-```
-
 GitHub Raw 地址：
 
 ```text
@@ -189,12 +153,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads
 ```
 
 ### 重度分流版
-
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash_Full.ini
-```
 
 GitHub Raw 地址：
 
@@ -205,12 +163,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads
 <a id="重度分流-fallback-版"></a>
 
 ### 重度分流故障转移版
-
-加速地址（`cdn.jsdelivr.net`）：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/cfg/Custom_Clash_Full_Fallback.ini
-```
 
 GitHub Raw 地址：
 

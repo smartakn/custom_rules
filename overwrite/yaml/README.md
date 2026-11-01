@@ -49,7 +49,7 @@
 
 启用后，模块会：
 
-1. 从 `cdn.jsdelivr.net` 下载对应的远程 YAML 到 `/etc/openclash/config/`；
+1. 从 GitHub 原站 `raw.githubusercontent.com` 下载对应的远程 YAML 到 `/etc/openclash/config/`；
 2. 将该 YAML 设为模块处理的配置文件；
 3. 使用 `ruby_map_edit` 把 `EN_KEY` 写入相应 `proxy-providers.*.url`；
 4. 设置订阅信息 URL；
@@ -93,7 +93,7 @@
 1. 先按 Wiki 完成 OpenClash LuCI 设置并备份当前可用配置。
 2. 在 OpenClash 运行状态页点击「覆写模块」，打开覆写编辑器。
 3. 点击模块卡片栏中的「+」，选择通过订阅链接添加。
-4. 从[全部模块订阅链接](#-全部模块订阅链接)一节复制模块地址，进入模块信息填写步骤。中国大陆网络通常优先使用 jsDelivr 加速链接，GitHub Raw 链接可作备用。
+4. 从[全部模块订阅链接](#-全部模块订阅链接)一节复制 GitHub Raw 地址，进入模块信息填写步骤。
 5. 确认名称、描述和匹配配置，并在模块变量或参数栏填写对应的订阅地址。
 6. 启用模块，保存并应用配置。
 7. 等待模块下载 YAML、写入 Provider 地址并触发 OpenClash 重启。
@@ -170,12 +170,6 @@ EN_KEY1=https://example.com/airport-subscription;EN_KEY2=https://example.com/sel
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash.conf
   ```
 
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash.conf
-  ```
-
 <a id="标准-fallback-版"></a>
 
 ### 标准故障转移版
@@ -186,24 +180,12 @@ EN_KEY1=https://example.com/airport-subscription;EN_KEY2=https://example.com/sel
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_Fallback.conf
   ```
 
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_Fallback.conf
-  ```
-
 ### 轻量版
 
 - GitHub Raw 链接：
 
   ```text
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_Lite.conf
-  ```
-
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_Lite.conf
   ```
 
 <a id="轻量-fallback-版"></a>
@@ -216,24 +198,12 @@ EN_KEY1=https://example.com/airport-subscription;EN_KEY2=https://example.com/sel
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_Lite_Fallback.conf
   ```
 
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_Lite_Fallback.conf
-  ```
-
 ### 极简 GFW 版
 
 - GitHub Raw 链接：
 
   ```text
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_GFW.conf
-  ```
-
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_GFW.conf
   ```
 
 <a id="极简-gfw-fallback-版"></a>
@@ -246,24 +216,12 @@ EN_KEY1=https://example.com/airport-subscription;EN_KEY2=https://example.com/sel
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_GFW_Fallback.conf
   ```
 
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_GFW_Fallback.conf
-  ```
-
 ### 重度分流版
 
 - GitHub Raw 链接：
 
   ```text
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_Full.conf
-  ```
-
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_Full.conf
   ```
 
 <a id="重度分流-fallback-版"></a>
@@ -276,12 +234,6 @@ EN_KEY1=https://example.com/airport-subscription;EN_KEY2=https://example.com/sel
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_Full_Fallback.conf
   ```
 
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_Full_Fallback.conf
-  ```
-
 ### 8 合 1
 
 - GitHub Raw 链接：
@@ -290,24 +242,12 @@ EN_KEY1=https://example.com/airport-subscription;EN_KEY2=https://example.com/sel
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_8in1.conf
   ```
 
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_8in1.conf
-  ```
-
 ### 自建节点 Provider 优先版
 
 - GitHub Raw 链接：
 
   ```text
   https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/refs/heads/main/overwrite/yaml/Custom_Clash_Selfhosted_Provider_Fallback.conf
-  ```
-
-- jsDelivr 加速链接：
-
-  ```text
-  https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/yaml/Custom_Clash_Selfhosted_Provider_Fallback.conf
   ```
 
 ## ✅ 最终验收

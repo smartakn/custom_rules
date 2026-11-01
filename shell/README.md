@@ -9,7 +9,7 @@
 - 设备运行 OpenWrt 或 ImmortalWrt，并使用 `opkg` 或 `apk`；其他发行版和包管理器不在支持范围内。
 - 使用 `root` 用户通过 SSH 执行命令。
 - 当前 `distfeeds` 中至少包含一个标准 `/releases/` 或 `/snapshots/` 仓库路径。安装器无法据此构造临时软件源时，会在修改软件源前停止。
-- 设备能够访问安装器使用的软件源镜像、jsDelivr、代理下载源或 GitHub。内核、Geo、Chnroute 和订阅等远程资源仍受网络可用性影响。
+- 设备能够访问安装器使用的软件源镜像、GitHub 原站及其 API；插件下载保留既有代理下载源作为回退。内核、Geo、Chnroute 和订阅等远程资源仍受网络可用性影响。
 - 已保存重要配置，并可以在插件或网络异常时重新通过 SSH 或本地管理界面连接设备。
 
 > [!WARNING]
@@ -28,21 +28,21 @@
 完整安装或更新（插件、内核、Smart 模型、Geo、Chnroute、订阅和用户预设）：
 
 ```sh
-wget -O /tmp/install_openclash.sh 'https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/shell/install_openclash_dev_update.sh' &&
+wget -O /tmp/install_openclash.sh 'https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/shell/install_openclash_dev_update.sh' &&
 sh /tmp/install_openclash.sh
 ```
 
 只安装或更新插件与内核：
 
 ```sh
-wget -O /tmp/install_openclash.sh 'https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/shell/install_openclash_dev.sh' &&
+wget -O /tmp/install_openclash.sh 'https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/shell/install_openclash_dev.sh' &&
 sh /tmp/install_openclash.sh
 ```
 
 只检测当前设备对应的 OpenClash 内核架构：
 
 ```sh
-wget -O /tmp/check_cpu_version.sh 'https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/shell/check_cpu_version.sh' &&
+wget -O /tmp/check_cpu_version.sh 'https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/shell/check_cpu_version.sh' &&
 sh /tmp/check_cpu_version.sh
 ```
 
@@ -55,7 +55,7 @@ sh /tmp/check_cpu_version.sh
 - 发行版、包管理器、防火墙和安装包格式；
 - 临时使用的软件源镜像、依赖处理和原软件源恢复状态；
 - 官方 `package` 分支、短 SHA、目标版本、安装包名称和实际下载来源；
-- 文件大小、SHA-256（可用时）和包管理器安装预检结果；
+- 文件大小、安装包 Git blob SHA-1（可用时）和包管理器安装预检结果；完整安装器还会显示模型 SHA-256 校验结果；
 - CPU 与内核架构、Meta 与 Smart 类型和 OpenClash 内置流程的调用状态；
 - 完整安装器中的 Smart、LightGBM、Geo、Chnroute、订阅和用户预设结果；
 - OpenClash 启用、重启以及最终汇总。
@@ -98,17 +98,16 @@ OpenWrt 使用中国科学技术大学的 CERNET 网络入口。CERNET 智能聚
 3. 从同一提交读取 `dev/version`；
 4. 构造对应的 `.ipk` 或 `.apk` 文件名；
 5. 从同一提交下载安装包；
-6. 检查文件非空且达到最低大小，并执行包管理器预检（dry run）；
+6. 通过 GitHub API 读取同一提交的文件大小和 Git blob SHA-1 并校验，随后执行包管理器预检（dry run）；元数据不可用时仍检查文件非空且达到最低大小；
 7. 覆盖重装；
 8. 从包管理器读取已安装版本并与目标版本核对。
 
 固定提交下载顺序是：
 
-1. `https://testingcf.jsdelivr.net/`
-2. `https://v6.gh-proxy.org/`
-3. GitHub Raw
+1. GitHub Raw 原站（`https://raw.githubusercontent.com/`）
+2. 既有回退 `https://v6.gh-proxy.org/`
 
-三条路径都使用同一个提交 SHA，不使用浮动的 `package/dev` 安装包 URL。如果 `package` 分支在安装期间发生移动，安装器最多追加一轮处理；即使分支之后再次移动，当前已安装内容仍来自一个完整且自洽的固定提交。
+两条路径都使用同一个提交 SHA，不使用浮动的 `package/dev` 安装包 URL。GitHub Contents API 的 `sha` 是 Git blob SHA-1，安装器按 Git 对象头和文件内容计算后比对；设备无可用 SHA-1 工具时保留精确大小和安装预检，并在结果中说明。如果 `package` 分支在安装期间发生移动，安装器最多追加一轮处理；即使分支之后再次移动，当前已安装内容仍来自一个完整且自洽的固定提交。
 
 `apk` 每次都使用 `--force-reinstall` 覆盖同版本。支持 `--allow-downgrade` 的 `apk` 版本会同时启用该参数；`apk` 3 已移除该选项，安装器会使用其支持的显式本地包覆盖方式，避免传入无效参数。
 
@@ -120,7 +119,7 @@ OpenWrt 使用中国科学技术大学的 CERNET 网络入口。CERNET 智能聚
 
 ```text
 release_branch=dev
-github_address_mod=https://testingcf.jsdelivr.net/
+github_address_mod=0
 core_version=<自动检测结果>
 enable=1
 ```
@@ -133,7 +132,7 @@ CPU 检测保留 `x86_64` 的 `v1`、`v2`、`v3` 级别，以及 `x86`、ARM、M
 /usr/share/openclash/openclash_core.sh "<Meta 或 Smart>"
 ```
 
-内核类型遵循 OpenClash 当前设置：`smart_enable=1` 时使用 Smart，否则读取 `core_type`，空值默认为 Meta。安装器不传入第二参数；当前 OpenClash 会将第二参数视为完整内核下载 URL，而 CDN 前缀已通过 `github_address_mod=https://testingcf.jsdelivr.net/` 写入。下载、重试、解压、配置测试、替换和重启决策由 OpenClash 内置脚本负责。
+内核类型遵循 OpenClash 当前设置：`smart_enable=1` 时使用 Smart，否则读取 `core_type`，空值默认为 Meta。安装器不传入第二参数；当前 OpenClash 会将第二参数视为完整内核下载 URL。`github_address_mod=0` 关闭 GitHub 地址代理，Meta / Smart 内核使用 GitHub Raw 原站。下载、重试、解压、配置测试、替换和重启决策由 OpenClash 内置脚本负责。
 
 最后两个安装器都执行：
 

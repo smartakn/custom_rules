@@ -341,10 +341,9 @@ function decideOutcome(snapshot, githubApi, githubPage, githubRaw) {
   const publicRepositoryReady =
     githubPage.status === "healthy" && githubRaw.status === "healthy";
 
-  // Mutable jsDelivr branch URLs can lag behind GitHub. Availability, rather
-  // than byte freshness, controls redirect mode. When GitHub's public page
-  // and Raw file are reachable, visitors should use the configured jsDelivr
-  // redirect even if its current response is stale or temporarily unknown.
+  // Availability, rather than byte freshness, controls redirect mode. When
+  // GitHub's public page and Raw file are reachable, visitors should use the
+  // configured GitHub origin redirects.
   if (publicRepositoryReady) {
     return { outcome: "healthy", reason: "github_repository_available" };
   }
@@ -364,13 +363,12 @@ function decideOutcome(snapshot, githubApi, githubPage, githubRaw) {
 }
 
 export async function runHealthChecks(env) {
-  const [manifestResult, githubApi, githubPage, githubRaw, jsdelivr] =
+  const [manifestResult, githubApi, githubPage, githubRaw] =
     await Promise.all([
       loadSnapshotManifest(env),
       probeGithubApi(),
       probeGithubPage(),
       probeHashedFile("github_raw", MIRROR_CONFIG.githubRawUrl),
-      probeHashedFile("jsdelivr", MIRROR_CONFIG.jsdelivrUrl),
     ]);
   const decision = decideOutcome(
     manifestResult.snapshot,
@@ -382,6 +380,6 @@ export async function runHealthChecks(env) {
   return {
     ...decision,
     snapshot: manifestResult.snapshot,
-    probes: [manifestResult.probe, githubApi, githubPage, githubRaw, jsdelivr],
+    probes: [manifestResult.probe, githubApi, githubPage, githubRaw],
   };
 }

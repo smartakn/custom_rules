@@ -62,7 +62,7 @@
 
 1. 进入「服务」→「OpenClash」运行状态页。
 2. 点击页面顶部的「覆写模块」按钮，打开覆写编辑器。
-3. 点击模块卡片栏中的「+」，选择通过订阅链接添加，并从本文复制 jsDelivr CDN 或 GitHub Raw 地址。
+3. 点击模块卡片栏中的「+」，选择通过订阅链接添加，并从本文复制 GitHub Raw 地址。
 4. 进入模块信息填写步骤，确认自动回填的名称和描述；旧版本按页面提供的字段手动填写。
 5. 将匹配配置文件设置为 `all` 或当前配置文件。不要留空，否则模块不会生效。
 6. 仅在模块说明要求时填写 `EN_KEY` 参数。
@@ -77,7 +77,7 @@
 元信息只在新增模块时回填表单。刷新已有模块的订阅不会自动修改其名称、描述、匹配配置、更新计划或参数。`#!CRON` 控制模块文件本身的订阅更新，Rule Provider 和模块内部 `DOWNLOAD_FILE` 的更新行为仍由各自设置决定。
 
 > [!TIP]
-> jsDelivr CDN 与 GitHub Raw 指向同一个仓库文件，只需要选择其中一个。jsDelivr CDN 通常更适合 GitHub Raw 访问质量不佳的网络环境。
+> 本文链接直接从 GitHub 原站下载文件，使用前请确认路由器能够访问 `raw.githubusercontent.com`。
 
 <!-- -->
 
@@ -102,12 +102,6 @@
 - 创建 `COCR-DNS-Leak-Guard` 策略组，并自动引入可用代理。
 
 模块不再接收 `EN_KEY1` 或 `EN_KEY2`。缺少 `proxy-server-nameserver` 时，模块只尝试复用有效的 `default-nameserver`；最终规则固定使用 `COCR-DNS-Leak-Guard`，避免远程模块参数进入动态 Ruby 表达式。
-
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Prevent_DNS_Leak.conf
-```
 
 GitHub Raw：
 
@@ -140,12 +134,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 - 添加加密 DNS IP MRS Rule Provider；
 - 将三条阻断规则插入现有规则列表顶部；
 - 保留原有 `rules` 和 `rule-providers`。
-
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Block_Encrypted_DNS.conf
-```
 
 GitHub Raw：
 
@@ -182,12 +170,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 
 模块会保留原有规则顺序、策略和其他附加参数，并跳过已经含有 `no-resolve` 或 `src` 的规则。
 
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Add_No_Resolve.conf
-```
-
 GitHub Raw：
 
 ```text
@@ -217,12 +199,6 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 - 将两条 `DIRECT` 规则插入现有规则列表顶部；
 - 为 IP Rule Provider 的引用规则添加 `no-resolve`；
 - 保留原有 `rules` 和 `rule-providers`。
-
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Add_Custom_Direct_Rules.conf
-```
 
 GitHub Raw：
 
@@ -275,12 +251,6 @@ rules:
 - 识别到受支持扩展名时，会修正已有的错误 `format`；
 - 未识别到 `.mrs`、`.yaml` 或 `.yml` 时保持原配置不变。
 
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Rule_Provider_Format_Fix.conf
-```
-
 GitHub Raw：
 
 ```text
@@ -322,12 +292,6 @@ rule-providers:
 - 添加 `GEOSITE,category-game-platforms-download,DIRECT`；
 - 将相关规则插入现有规则列表顶部。
 
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Direct_Game_Download.conf
-```
-
 GitHub Raw：
 
 ```text
@@ -351,13 +315,7 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 - GeoIP DAT：`geoip.dat`；
 - GeoASN：`Country-asn.mmdb`。
 
-以上数据库地址均使用 `cdn.jsdelivr.net`。
-
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Set_GeoIP_Database_URL.conf
-```
+以上数据库地址均使用 GitHub 原站 `raw.githubusercontent.com`。
 
 GitHub Raw：
 
@@ -378,13 +336,7 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 
 ### 🇨🇳 Set China IP Route URL
 
-[`Set_China_IP_Route_URL.conf`](./Set_China_IP_Route_URL.conf) 用于替换 OpenClash 大陆白名单使用的 IPv4 和 IPv6 Chnroute 数据源。两个数据源地址均使用 `cdn.jsdelivr.net`。
-
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Set_China_IP_Route_URL.conf
-```
+[`Set_China_IP_Route_URL.conf`](./Set_China_IP_Route_URL.conf) 用于替换 OpenClash 大陆白名单使用的 IPv4 和 IPv6 Chnroute 数据源。两个数据源地址均使用 GitHub 原站 `raw.githubusercontent.com`。
 
 GitHub Raw：
 
@@ -413,13 +365,7 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 | 大陆 IPv4 白名单 | `text/cn-ipv4.txt` |
 | 大陆 IPv6 白名单 | `text/cn-ipv6.txt` |
 
-所有地址均使用 `cdn.jsdelivr.net/gh/Aethersailor/geoip@release/`。
-
-jsDelivr CDN：
-
-```text
-https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Set_IP_Data_Source_URL.conf
-```
+所有地址均使用 `raw.githubusercontent.com/Aethersailor/geoip/release/`。
 
 GitHub Raw：
 
@@ -471,7 +417,7 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 模块没有生效时，依次检查：
 
 1. 模块是否已经启用；
-2. jsDelivr CDN 或 GitHub Raw 地址是否能够正常下载；
+2. GitHub Raw 地址是否能够正常下载；
 3. 远程模块内容是否已经显式刷新；仅保存设置或重启 OpenClash 不会重新下载已保存的模块文件；
 4. 模块要求的 `EN_KEY` 参数格式是否正确；
 5. 当前 OpenClash 是否接受模块使用的 `[General]`、`[YAML]`、`[Overwrite]` 和 Ruby helper；
@@ -483,10 +429,9 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
 
 如果 `Add_No_Resolve.conf` 的警告中仍出现 `begin; add_no_resolve`，OpenClash 读取的是修复前保存在路由器上的旧模块文件，不是仓库当前版本。
 
-1. 将订阅地址替换为以下任一当前地址：
+1. 将订阅地址替换为以下 GitHub Raw 原站地址：
 
    ```text
-   https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/overwrite/Add_No_Resolve.conf
    https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overwrite/Add_No_Resolve.conf
    ```
 
@@ -500,7 +445,7 @@ https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/overw
    输出包含 `drop('3'.to_i)` 时，表示已加载兼容 Ruby 4 的模块。仅包含 `transform_values!` 不能证明已加载本次修复。正文仍包含 `begin; add_no_resolve` 时，先解决模块下载或缓存问题。
 4. 重新应用配置，并确认日志中不再出现「跳过不支持的覆写命令」。
 
-旧版文档曾使用 `testingcf.jsdelivr.net/...@main/...` 地址。该入口的可变分支缓存可能滞后，不再作为覆写模块订阅地址使用。
+旧版文档中的镜像地址已改为 GitHub Raw 原站地址；已有模块请同步修改订阅地址。
 
 ### 旧版 OpenClash 在 Ruby 4 环境中跳过覆写命令
 

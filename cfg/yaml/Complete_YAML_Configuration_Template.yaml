@@ -53,13 +53,13 @@ proxy-providers:
 # 用于 IP、域名和 ASN 分类判断
 geox-url:
   # MaxMind Country 数据库（包含中国大陆 IP 数据）
-  mmdb: https://testingcf.jsdelivr.net/gh/alecthw/mmdb_china_ip_list@release/Country.mmdb
+  mmdb: https://raw.githubusercontent.com/alecthw/mmdb_china_ip_list/release/Country.mmdb
   # GeoIP 数据库
-  geoip: https://testingcf.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
+  geoip: https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geoip.dat
   # GeoSite 数据库
-  geosite: https://testingcf.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
+  geosite: https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geosite.dat
   # ASN 数据库
-  asn: https://testingcf.jsdelivr.net/gh/xishang0128/geoip@release/GeoLite2-ASN.mmdb
+  asn: https://raw.githubusercontent.com/xishang0128/geoip/release/GeoLite2-ASN.mmdb
 geo-auto-update: true
 # GeoData 更新间隔，单位：小时
 geo-update-interval: 24
@@ -748,54 +748,54 @@ rule-providers:
     behavior: classical
     interval: 28800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Port_Direct.yaml"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Custom_Port_Direct.yaml"
     format: yaml
 
   Custom_Direct_Domain:
     behavior: domain
     interval: 1800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Domain.mrs"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Custom_Direct_Domain.mrs"
     format: mrs
 
   Custom_Direct_IP:
     behavior: ipcidr
     interval: 28800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_IP.mrs"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Custom_Direct_IP.mrs"
     format: mrs
 
   Custom_Direct_Port:
     behavior: classical
     interval: 28800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Classical_Port.yaml"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Custom_Direct_Classical_Port.yaml"
     format: yaml
 
   Custom_Proxy_Domain:
     behavior: domain
     interval: 28800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Domain.mrs"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Custom_Proxy_Domain.mrs"
     format: mrs
 
   Custom_Proxy_IP:
     behavior: ipcidr
     interval: 28800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_IP.mrs"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Custom_Proxy_IP.mrs"
     format: mrs
 
   Steam_CDN_Domain:
     behavior: domain
     interval: 28800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Steam_CDN_Domain.mrs"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Steam_CDN_Domain.mrs"
     format: mrs
 
   Steam_CDN_IP:
     behavior: ipcidr
     interval: 28800
     type: http
-    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Steam_CDN_IP.mrs"
+    url: "https://raw.githubusercontent.com/Aethersailor/Custom_OpenClash_Rules/main/rule/Steam_CDN_IP.mrs"
     format: mrs
