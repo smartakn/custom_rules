@@ -1,0 +1,11 @@
+# 自管理域名规则，不参与公共规则自动生成。
+# Clash/OpenClash 通过 GitHub Raw 链接每 1800 秒（30 分钟）更新一次。
+# 请维护本源文件，不要直接修改 Clash/OpenClash 的 rule_provider 下载缓存。
+# 每行一个域名，不要填写协议、端口、路径或 DOMAIN-SUFFIX 等规则前缀。
+# 精确匹配：'example.com'（仅该域名）
+# 域名及其所有子域名：'+.example.com'
+# 取消下方示例的注释后，请将 payload: [] 改为 payload:。
+payload:
+#  - 'example.com'
+#  - '+.example.org'
+  - '+.ai.slanhu.com'

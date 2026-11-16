@@ -301,6 +301,8 @@ proxy-groups:
 rules:
   - "GEOSITE,private,🎯 全球直连"
   - "GEOIP,private,🎯 全球直连,no-resolve"
+  # 自管理域名优先于公共规则；如需直连，可将目标改为「🎯 全球直连」。
+  - "RULE-SET,Self_Managed_Domain,🚀 手动选择"
   - "RULE-SET,Custom_Direct_Domain,🎯 全球直连"
   - "RULE-SET,Custom_Direct_IP,🎯 全球直连,no-resolve"
   - "RULE-SET,Custom_Direct_Port,🎯 全球直连"
@@ -330,7 +332,7 @@ rules:
   - "GEOSITE,category-entertainment,🌎 国外媒体"
   - "GEOSITE,category-ecommerce,🛒 国外电商"
   - "GEOSITE,tiktok,🇸🇬 新加坡节点"
-  - "GEOSITE,gfw,🚀 手动选择"
+  - "RULE-SET,GFW_Domain,🚀 手动选择"
   - "GEOIP,telegram,🌐 社交媒体,no-resolve"
   - "GEOIP,twitter,🌐 社交媒体,no-resolve"
   - "GEOIP,facebook,🌐 社交媒体,no-resolve"
@@ -345,6 +347,25 @@ rules:
 # Domain/IP 规则优先使用 MRS；包含端口等复合规则时使用 Classical YAML。
 # 更新周期与 Custom_Clash.ini 保持一致：28800 秒（8 小时）。
 rule-providers:
+  # 自管理域名：维护自己 GitHub 仓库 host 分支下的 rule/Self_Managed_Domain.yaml。
+  # path 为下载缓存；请在 GitHub 源文件中修改域名，不要直接修改缓存文件。
+  Self_Managed_Domain:
+    type: http
+    behavior: domain
+    interval: 1800
+    url: "https://raw.githubusercontent.com/smartakn/custom_rules/host/rule/Self_Managed_Domain.yaml"
+    path: ./rule_provider/Self_Managed_Domain.yaml
+    format: yaml
+
+  # Stash 按需加载的 v2fly GeoSite 源不含 gfw，使用显式 GFWList 规则源。
+  GFW_Domain:
+    behavior: domain
+    interval: 28800
+    type: http
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
+    path: ./rule_provider/GFW_Domain.yaml
+    format: yaml
+
   Nonstandard_Port_Direct:
     behavior: classical
     interval: 28800
